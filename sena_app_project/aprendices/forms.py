@@ -10,7 +10,7 @@ class AprendizForm(forms.Form):
     fecha_nacimiento = forms.DateField(label="Fecha de Nacimiento")
     ciudad = forms.CharField(max_length=100, required=False, label="Ciudad")
     programa = forms.CharField(max_length=100, required=False, label="Programa de Formación")
-    
+    apoyos = forms.ChoiceField(choices=Aprendiz.APOYOS_CHOICES, label="Apoyo SENA", help_text="Seleccione el napoyo el cual pertene.")
     
     #Validaciones personalizadas 
     def clean(self):
@@ -46,5 +46,6 @@ class AprendizForm(forms.Form):
             correo=self.cleaned_data.get('correo'),
             fecha_nacimiento=self.cleaned_data['fecha_nacimiento'],
             ciudad=self.cleaned_data.get('ciudad'),
-            programa=self.cleaned_data.get('programa', 'No especificado')
+            programa=self.cleaned_data.get('programa', 'No especificado'),
+            apoyos=self.cleaned_data.get('apoyos', 'NA')
         )

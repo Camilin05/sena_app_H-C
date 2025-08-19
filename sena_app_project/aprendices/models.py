@@ -2,6 +2,14 @@ from django.db import models
 
 # Create your models here.
 class Aprendiz(models.Model):
+    APOYOS_CHOICES = [
+        ('ASR', 'Apoyo Sostenimiento Regular'),
+        ('FIC', 'Apoyo Sostenimiento FIC'),
+        ('ATR', 'Apoyo de transoporte'),
+        ('ALM', 'Apoyo Alimentación'),
+        ('NA', 'No aplica/no tiene'),
+    ]
+    
     documento_identidad = models.CharField(max_length=20, unique=True)
     nombre = models.CharField(max_length=100)
     apellido = models.CharField(max_length=100)
@@ -10,6 +18,7 @@ class Aprendiz(models.Model):
     fecha_nacimiento = models.DateField()
     ciudad = models.CharField(max_length=100, null=True)
     programa = models.CharField(max_length=100)
+    apoyos = models.CharField(max_length=50, choices=APOYOS_CHOICES, blank=True, null=True, verbose_name="Tipo de Apoyo", default='ASR')
     
     class Meta:
         verbose_name = "Aprendiz"
