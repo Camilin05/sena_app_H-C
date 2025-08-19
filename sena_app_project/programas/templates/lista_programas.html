@@ -57,11 +57,13 @@
                 <div class="icono-vacio"><i class="fas fa-book-open"></i></div>
                 <h3 class="titulo-vacio">No hay programas registrados</h3>
                 <p class="descripcion-vacio">Aún no se han agregado programas de formación al sistema.</p>
-            </div>
-        {% endif %}
-        <a href="{% url 'admin:programas_programa_add' %}" class="btn_saveA">
+            
+        
+        <a href="{% url 'admin:programas_programa_add' %}" class="boton-accion-vacio">
             <i class="fas fa-plus"></i> Nuevo Programa
         </a>
+        </div>
+        {% endif %}
     </section>
 </div>
 {% endblock %}

@@ -3,6 +3,7 @@
 {% block title %}Directorio de Instructores - Sistema Integral SENA{% endblock %}
 
 {% block content %}
+<div class="contenido_la">
 <div class="encabezado-pagina animacion-entrada">
     <div class="contenedor-encabezado">
         <div class="info-encabezado">
@@ -67,6 +68,7 @@
     </div>
 </div>
 
+<section class="sectionla">
 {% if instructores %}
 <div class="contenedor-tabla animacion-entrada aparecer">
     <table class="tabla-moderna">
@@ -154,7 +156,7 @@
 </div>
 
 {% else %}
-<div class="estado-vacio animacion-entrada">
+<div class="estado-vacio">
     <div class="icono-vacio">
         <i class="fas fa-chalkboard-teacher"></i>
     </div>
@@ -169,7 +171,7 @@
     </a>
 </div>
 {% endif %}
-
+</section>
 <script>
     document.getElementById('campoBusqueda').addEventListener('input', function(e) {
         filtrarInstructores();
@@ -294,27 +296,5 @@
     });
 </script>
 
-<style>
-    .ripple {
-        position: absolute;
-        border-radius: 50%;
-        background: rgba(255, 255, 255, 0.6);
-        transform: scale(0);
-        animation: ripple-animation 0.6s linear;
-        pointer-events: none;
-    }
-
-    @keyframes ripple-animation {
-        to {
-            transform: scale(4);
-            opacity: 0;
-        }
-    }
-
-    /* Posición relativa para botones con ripple */
-    .boton-accion, .boton-nuevo, .boton-filtro {
-        position: relative;
-        overflow: hidden;
-    }
-</style>
+</div>
 {% endblock %}
