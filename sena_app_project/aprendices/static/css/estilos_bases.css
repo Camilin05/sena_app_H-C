@@ -181,6 +181,7 @@ body {
     position: relative;
     overflow: hidden;
     box-shadow: var(--sombra-elevada);
+    margin: 30px;
 }
 
 .contenedor-hero::before {
@@ -298,6 +299,8 @@ body {
     position: relative;
     overflow: hidden;
     border: 1px solid rgba(40, 167, 69, 0.1);
+
+    text-align: center;
 }
 
 .tarjeta-servicio::before {
@@ -403,9 +406,9 @@ body {
 }
 
 .contenedor-estadisticas {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-    gap: 2rem;
+    display: flex;
+    gap: 1rem;
+    justify-content: center;
 }
 
 .item-estadistica {
@@ -414,6 +417,7 @@ body {
     border-radius: 15px;
     box-shadow: var(--sombra-suave);
     transition: all 0.3s ease;
+    width: 750px;
 }
 
 .item-estadistica:hover {

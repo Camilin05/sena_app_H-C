@@ -41,6 +41,7 @@ INSTALLED_APPS = [
     'aprendices',
     "instructores",
     'programas',
+    'apoyos'
 ]
 
 MIDDLEWARE = [
