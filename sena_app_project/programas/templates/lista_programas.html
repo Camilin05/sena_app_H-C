@@ -1,0 +1,67 @@
+{% extends "base.html" %}
+{% block title %}Lista de Programas{% endblock %}
+{% block content %}
+<div class="contenido_la">
+    <nav class="navla">
+        <div class="t1">
+            <h1>Programas de Formación SENA</h1>
+        </div>
+    </nav>
+    <section class="sectionla">
+        {% if lista_programas %}
+            <h2>Lista de programas</h2>
+            <div class="total-aprendices">
+                <i class="fas fa-book-open"></i>
+                Total de programas: {{ total_programas }}
+            </div>
+            <table>
+                <thead>
+                    <tr>
+                        <th>Código</th>
+                        <th>Nombre</th>
+                        <th>Nivel de formación</th>
+                        <th>Modalidad</th>
+                        <th>Duración (meses)</th>
+                        <th>Duración (horas)</th>
+                        <th>Centro de formación</th>
+                        <th>Regional</th>
+                        <th>Estado</th>
+                        <th>Creación</th>
+                        <th>Registro</th>
+                        <th>Acciones</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for programa in lista_programas %}
+                    <tr>
+                        <td data-label="Código">{{ programa.codigo }}</td>
+                        <td data-label="Nombre">{{ programa.nombre }}</td>
+                        <td data-label="Nivel">{{ programa.nivel_formacion }}</td>
+                        <td data-label="Modalidad">{{ programa.modalidad }}</td>
+                        <td data-label="Meses">{{ programa.duracion_meses }}</td>
+                        <td data-label="Horas">{{ programa.duracion_horas }}</td>
+                        <td data-label="Centro">{{ programa.centro_formacion }}</td>
+                        <td data-label="Regional">{{ programa.regional }}</td>
+                        <td data-label="Estado">{{ programa.estado }}</td>
+                        <td data-label="Creación">{{ programa.fecha_creacion|date:"d/m/Y" }}</td>
+                        <td data-label="Registro">{{ programa.fecha_registro|date:"d/m/Y" }}</td>
+                        <td data-label="Acciones" class="acciones-cell">
+                            <a href="{% url 'admin:programas_programa_change' programa.id %}" class="btn_editA">Editar</a>
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        {% else %}
+            <div class="estado-vacio">
+                <div class="icono-vacio"><i class="fas fa-book-open"></i></div>
+                <h3 class="titulo-vacio">No hay programas registrados</h3>
+                <p class="descripcion-vacio">Aún no se han agregado programas de formación al sistema.</p>
+            </div>
+        {% endif %}
+        <a href="{% url 'admin:programas_programa_add' %}" class="btn_saveA">
+            <i class="fas fa-plus"></i> Nuevo Programa
+        </a>
+    </section>
+</div>
+{% endblock %}

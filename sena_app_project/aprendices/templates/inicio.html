@@ -1,0 +1,136 @@
+{% extends 'base.html' %}
+
+{% block title %}Inicio - Sistema Integral de Gestión Académica SENA{% endblock %}
+
+{% block content %}
+<div class="seccion-hero">
+    <div class="contenedor-hero animacion-entrada">
+        <h1 class="titulo-principal">Bienvenido a SENA APP</h1>
+        <p class="subtitulo-principal">Sistema Integral de Gestión Académica del Servicio Nacional de Aprendizaje</p>
+        <p class="descripcion-principal">
+            Plataforma tecnológica avanzada diseñada para facilitar la administración y consulta eficiente de información académica, 
+            proporcionando herramientas integrales para la gestión de aprendices, instructores y programas formativos en el entorno 
+            educativo del SENA.
+        </p>
+        
+    </div>
+</div>
+
+<div class="seccion-estadisticas animacion-entrada">
+    <h2 class="titulo-estadisticas">Gestión Académica Integral</h2>
+    <div class="contenedor-estadisticas">
+        <div class="item-estadistica">
+            <div class="numero-estadistica">{{ total_aprendices|default:"0" }}</div>
+            <div class="label-estadistica">Aprendices Registrados</div>
+        </div>
+        <div class="item-estadistica">
+            <div class="numero-estadistica">{{ total_instructores|default:"0" }}</div>
+            <div class="label-estadistica">Instructores Activos</div>
+        </div>
+        <div class="item-estadistica">
+            <div class="numero-estadistica">{{ total_programas|default:"0" }}</div>
+            <div class="label-estadistica">Programas Disponibles</div>
+        </div>
+        <div class="item-estadistica">
+            <div class="numero-estadistica">{{ cursos_activos|default:"0" }}</div>
+            <div class="label-estadistica">Cursos activos</div>
+    </div>
+</div>
+
+<div class="seccion-servicios">
+    <div class="cuadricula-servicios">
+        <div class="tarjeta-servicio animacion-entrada">            
+                <div class="icono-servicio">            
+                    <a href="{% url 'aprendices:lista_aprendices' %}">
+                <i class="fas fa-users"></i>
+                </a>
+            </div>
+            <h3 class="titulo-servicio">Directorio de Aprendices</h3>
+            <p class="descripcion-servicio">
+                Acceda al registro completo y actualizado de todos los estudiantes matriculados en la institución. 
+                Consulte información detallada, datos de contacto y estado académico de cada aprendiz registrado en el sistema.
+            </p>
+            <a href="{% url 'aprendices:lista_aprendices' %}" class="boton-servicio">
+                Explorar Directorio
+                <i class="fas fa-arrow-right"></i>
+            </a>
+        </div>
+        <div class="tarjeta-servicio animacion-entrada">
+            <div class="icono-servicio">
+                <a href="{% url 'instructores:lista_instructores' %}">
+                    <i class="fas fa-chalkboard-teacher"></i>
+                </a>
+            </div>
+            <h3 class="titulo-servicio">Gestión de Instructores</h3>
+            <p class="descripcion-servicio">
+                Consulte el directorio completo del cuerpo docente registrado en el sistema institucional. 
+                Acceda a información sobre especialidades, programas asignados y datos de contacto actualizados de cada instructor.
+            </p>
+            <a href="{% url 'instructores:lista_instructores' %}" class="boton-servicio">
+                Ver Instructores
+                <i class="fas fa-arrow-right"></i>
+            </a>
+        </div>
+        <div class="tarjeta-servicio animacion-entrada">
+            <div class="icono-servicio">
+                <a href="{% url 'programas:lista_programas' %}">
+                    <i class="fas fa-book-open"></i>
+                </a>
+            </div>
+            <h3 class="titulo-servicio">Catálogo de Programas</h3>
+            <p class="descripcion-servicio">
+                Explore la oferta académica integral de la institución educativa. 
+                Consulte detalles completos sobre cada programa formativo, incluyendo características específicas, duración y modalidades disponibles.
+            </p>
+            <a href="{% url 'programas:lista_programas' %}" class="boton-servicio">
+                Consultar Programas
+                <i class="fas fa-arrow-right"></i>
+            </a>
+        </div>
+        <div class="tarjeta-servicio animacion-entrada">
+            <div class="icono-servicio">
+                <a href="{% url 'aprendices:lista_cursos' %}">
+                    <i class="fas fa-book-open"></i>
+                </a>
+            </div>
+            <h3 class="titulo-servicio">Lista de Cursos</h3>
+            <p class="descripcion-servicio">
+                Visualice los cursos activos actualmente. 
+                Consulte detalles completos sobre cada curso, incluyendo características específicas, duración, instructores y aprendices vinculados a este curso.
+            </p>
+            <a href="{% url 'aprendices:lista_cursos' %}" class="boton-servicio">
+                Ver Programas
+                <i class="fas fa-arrow-right"></i>
+            </a>
+        </div>
+    </div>
+</div>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        const numeros = document.querySelectorAll('.numero-estadistica');
+        const observer = new IntersectionObserver((entradas) => {
+            entradas.forEach(entrada => {
+                if (entrada.isIntersecting) {
+                    const numero = entrada.target;
+                    const valorFinal = parseInt(numero.textContent.trim() || '0');
+                    let valorActual = 0;
+                    const incremento = Math.max(1, valorFinal / 50);
+                    
+                    const timer = setInterval(() => {
+                        valorActual += incremento;
+                        if (valorActual >= valorFinal) {
+                            numero.textContent = valorFinal;
+                            clearInterval(timer);
+                        } else {
+                            numero.textContent = Math.floor(valorActual);
+                        }
+                    }, 30);
+                    observer.unobserve(numero);
+                }
+            });
+        });
+        numeros.forEach(numero => observer.observe(numero));
+    });
+</script>
+{% endblock %}

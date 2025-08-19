@@ -1,0 +1,71 @@
+{% extends 'base.html' %}
+
+{% block title %}Detalles Aprendiz - SENA APP{% endblock %}
+
+{% block content %}
+<div class="container-fluid py-4 animacion-entrada">
+    <div class="row mb-4">
+        <div class="col-12">
+            <nav aria-label="breadcrumb">
+                <ol class="breadcrumb">
+                    <li class="breadcrumb-item"><a href="{% url 'aprendices:inicio' %}" class="back-link">Inicio</a></li>
+                    <li class="breadcrumb-item"><a href="{% url 'aprendices:lista_aprendices' %}" class="back-link">Lista Aprendices</a>
+                    </li>
+                    <li class="breadcrumb-item active" aria-current="page">{{ aprendiz.nombre_completo }}</li>
+                </ol>
+            </nav>
+        </div>
+    </div>
+
+    <div class="row mb-4">
+        <div class="col-12">
+            <div class="card shadow-sm">
+                <div class="card-header d-flex align-items-center">
+                    <i class="fas fa-user-graduate me-2"></i>
+                    <h4 class="mb-0">Perfil del Aprendiz</h4>
+                </div>
+                <div class="card-body">
+                    <div class="row align-items-center">
+                        <div class="col-md-3 text-center">
+                            <div class="instructor-avatar mb-3">
+                                {{ aprendiz.nombre.0 }}{{ aprendiz.apellido.0 }}
+                            </div>
+                            <h4 class="text-primary">{{ aprendiz.nombre_completo }}</h4>
+                            <div class="mt-3">
+                                <a href="{% url 'admin:aprendices_aprendiz_change' aprendiz.pk %}" class="btn btn-sm btn-outline-primary">
+                                    <i class="fas fa-edit me-1"></i> Editar Perfil
+                                </a>
+                            </div>
+                        </div>
+                        <div class="col-md-9">
+                            <div class="row">
+                                <div class="col-lg-6">
+                                    <div class="info-item">
+                                        <h6 class="text-muted mb-2">
+                                            <i class="fas fa-id-card me-2"></i><strong>Información Personal</strong>
+                                        </h6>
+                                        <p class="mb-1"><strong>Documento:</strong> {{ aprendiz.documento_identidad }}</p>
+                                        <p class="mb-1"><strong>Nombres:</strong> {{ aprendiz.nombre }}</p>
+                                        <p class="mb-1"><strong>Apellidos:</strong> {{ aprendiz.apellido }}</p>
+                                        <p class="mb-0"><strong>Fecha Nacimiento:</strong> {{ aprendiz.fecha_nacimiento|date:"d/m/Y" }}</p>
+                                    </div>
+                                </div>
+                                <div class="col-lg-6">
+                                    <div class="info-item">
+                                        <h6 class="text-muted mb-2">
+                                            <i class="fas fa-map-marker-alt me-2"></i><strong>Información de Contacto</strong>
+                                        </h6>
+                                        <p class="mb-1"><strong>Correo:</strong> <a href="mailto:{{ aprendiz.correo }}">{{ aprendiz.correo }}</a></p>
+                                        <p class="mb-1"><strong>Teléfono:</strong> {{ aprendiz.telefono }}</p>
+                                        <p class="mb-0"><strong>Ciudad:</strong> {{ aprendiz.ciudad }}</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

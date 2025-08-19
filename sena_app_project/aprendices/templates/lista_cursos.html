@@ -1,0 +1,113 @@
+{% extends 'base.html' %}
+
+{% block title %}Lista de Cursos SENA - SENA APP{% endblock %}
+
+{% block content %}
+<div class="encabezado-cursos animacion-entrada">
+    <div class="contenedor-encabezado-cursos">
+        <div class="info-encabezado-cursos">
+            <h2>Lista de Cursos SENA</h2>
+            <p class="subtitulo-encabezado">Gestión integral de cursos formativos institucionales</p>
+        </div>
+        <div class="controles-cursos">
+            <div class="insignia-total-cursos">
+                <i class="fas fa-book-open"></i>
+                <span>Total: {{ total_cursos }} Cursos</span>
+            </div>
+            <a href="{% url 'admin:aprendices_curso_add' %}" class="boton-nuevo-curso">
+                <i class="fas fa-plus"></i>
+                Nuevo Curso
+            </a>
+        </div>
+    </div>
+</div>
+
+{% if lista_cursos %}
+<div class="contenedor-tabla-cursos animacion-entrada aparecer">
+    <table class="tabla-cursos">
+        <thead>
+            <tr>
+                <th><i class="fas fa-code"></i> Código Curso</th>
+                <th><i class="fas fa-book"></i> Nombre Curso</th>
+                <th><i class="fas fa-graduation-cap"></i> Programa de Formación</th>
+                <th><i class="fas fa-chalkboard-teacher"></i> Instructor</th>
+                <th><i class="fas fa-calendar-alt"></i> Fecha Inicio</th>
+                <th><i class="fas fa-calendar-check"></i> Fecha Finalización</th>
+                <th><i class="fas fa-clock"></i> Horario</th>
+                <th><i class="fas fa-info-circle"></i> Estado</th>
+                <th><i class="fas fa-cogs"></i> Acciones</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for curso in lista_cursos %}
+            <tr class="fila-curso">
+                <td class="codigo-curso">
+                    <strong><a href="curso/{{ curso.id }}">{{ curso.codigo }}</a></strong>
+                </td>
+                <td class="nombre-curso">{{ curso.nombre }}</td>
+                <td><span class="programa-curso">{{ curso.programa }}</span></td>
+                <td class="instructor-curso">{{ curso.instructor_coordinador }}</td>
+                <td class="fecha-curso">{{ curso.fecha_inicio|date:"d/m/Y" }}</td>
+                <td class="fecha-curso">{{ curso.fecha_fin|date:"d/m/Y" }}</td>
+                <td><span class="horario-curso">{{ curso.horario }}</span></td>
+                <td>
+                    <span class="estado-curso estado-{{ curso.estado|lower }}">{{ curso.estado }}</span>
+                </td>
+                <td>
+                    <a href="{% url 'admin:aprendices_curso_change' curso.pk %}" 
+                        class="boton-editar-curso" title="Editar curso">
+                        <i class="fas fa-edit"></i>
+                        Editar
+                    </a>
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+
+<div class="contenedor-paginacion">
+    <div class="paginacion">
+        <a href="#" class="enlace-pagina">« Anterior</a>
+        <a href="#" class="enlace-pagina activo">1</a>
+        <a href="#" class="enlace-pagina">2</a>
+        <a href="#" class="enlace-pagina">3</a>
+        <a href="#" class="enlace-pagina">Siguiente »</a>
+    </div>
+</div>
+
+{% else %}
+<div class="estado-vacio-cursos animacion-entrada">
+    <div class="icono-vacio-cursos">
+        <i class="fas fa-book-open"></i>
+    </div>
+    <h3 class="titulo-vacio-cursos">No hay Cursos registrados</h3>
+    <p class="descripcion-vacio-cursos">
+        Aún no se han registrado Cursos en el sistema institucional.<br>
+        Inicie el proceso de registro para comenzar a gestionar los cursos formativos.
+    </p>
+    <a href="{% url 'admin:aprendices_curso_add' %}" class="boton-accion-vacio-cursos">
+        <i class="fas fa-plus"></i>
+        Registrar Primer Curso
+    </a>
+</div>
+{% endif %}
+
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        const filas = document.querySelectorAll('.fila-curso');
+        filas.forEach((fila, indice) => {
+            fila.style.animationDelay = `${indice * 0.05}s`;
+            fila.classList.add('animacion-entrada');
+        });
+    });
+
+    function filtrarCursos(termino) {
+        const filas = document.querySelectorAll('.fila-curso');
+        filas.forEach(fila => {
+            const texto = fila.textContent.toLowerCase();
+            fila.style.display = texto.includes(termino.toLowerCase()) ? '' : 'none';
+        });
+    }
+</script>
+{% endblock %}

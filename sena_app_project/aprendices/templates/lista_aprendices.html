@@ -1,0 +1,132 @@
+{% extends 'base.html' %}
+
+{% block title %}Directorio de Aprendices - Sistema Integral SENA{% endblock %}
+
+{% block content %}
+<div class="encabezado-pagina animacion-entrada">
+    <div class="contenedor-encabezado">
+        <div class="info-encabezado">
+            <h2>Directorio de Aprendices SENA</h2>
+            <p class="subtitulo-encabezado">Gestión integral del registro estudiantil institucional</p>
+        </div>
+        <div class="controles-encabezado">
+            <div class="insignia-total">
+                <i class="fas fa-users"></i>
+                <span>Total: {{ total_aprendices|default:"0" }} aprendices</span>
+            </div>
+            <a href="{% url 'admin:aprendices_aprendiz_add' %}" class="boton-nuevo">
+                <i class="fas fa-plus"></i>
+                Registrar Aprendiz
+            </a>
+        </div>
+    </div>
+</div>
+
+<div class="seccion-filtros animacion-entrada">
+    <div class="contenedor-filtros">
+        <div class="campo-busqueda">
+            <i class="fas fa-search icono-busqueda"></i>
+            <input type="text" class="entrada-busqueda" placeholder="Buscar por nombre, documento o correo..." id="campoBusqueda">
+        </div>
+        <button class="boton-filtro" onclick="alert('Funcionalidad de filtros avanzados - Próximamente disponible');">
+            <i class="fas fa-filter"></i>
+            Filtros
+        </button>
+        <button class="boton-filtro" onclick="alert('Funcionalidad de exportación - Próximamente disponible');">
+            <i class="fas fa-download"></i>
+            Exportar
+        </button>
+    </div>
+</div>
+
+{% if lista_aprendices %}
+<div class="contenedor-tabla animacion-entrada aparecer">
+    <table class="tabla-moderna">
+        <thead>
+            <tr>
+                <th><i class="fas fa-id-card"></i> Documento</th>
+                <th><i class="fas fa-user"></i> Nombre Completo</th>
+                <th><i class="fas fa-envelope"></i> Correo Electrónico</th>
+                <th><i class="fas fa-phone"></i> Teléfono</th>
+                <th><i class="fas fa-map-marker-alt"></i> Ciudad</th>
+                <th><i class="fas fa-graduation-cap"></i> Programa</th>
+                <th><i class="fas fa-calendar"></i> Fecha Nacimiento</th>
+                <th><i class="fas fa-cogs"></i> Acciones</th>
+            </tr>
+        </thead>
+        <tbody id="tablaAprendices">
+            {% for aprendiz in lista_aprendices %}
+            <tr class="fila-aprendiz">
+                <td>
+                    <a href= "aprendiz/{{ aprendiz.id }}"> <span class="documento-destacado">{{ aprendiz.documento_identidad }}</span> 
+                        </a>
+                </td>
+                <td>
+                    <strong>{{ aprendiz.nombre_completo }}</strong>
+                </td>
+                <td>
+                    <a href="mailto:{{ aprendiz.correo }}" class="enlace-correo">
+                        {{ aprendiz.correo }}
+                    </a>
+                </td>
+                <td>
+                    <span>{{ aprendiz.telefono|default:"No registrado" }}</span>
+                </td>
+                <td>
+                    <span>{{ aprendiz.ciudad|default:"No especificada" }}</span>
+                </td>
+                <td>
+                    <span class="programa-etiqueta">{{ aprendiz.programa|default:"Sin programa" }}</span>
+                </td>
+                <td>
+                    <span class="fecha-formateada">{{ aprendiz.fecha_nacimiento|date:"d/m/Y" }}</span>
+                </td>
+                <td>
+                    <a href="{% url 'admin:aprendices_aprendiz_change' aprendiz.pk %}" 
+                        class="boton-accion" title="Editar información del aprendiz">
+                        <i class="fas fa-edit"></i>
+                        Editar
+                    </a>
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+
+<div class="contenedor-paginacion">
+    <div class="paginacion">
+        <a href="#" class="enlace-pagina">« Anterior</a>
+        <a href="#" class="enlace-pagina activo">1</a>
+        <a href="#" class="enlace-pagina">2</a>
+        <a href="#" class="enlace-pagina">3</a>
+        <a href="#" class="enlace-pagina">Siguiente »</a>
+    </div>
+</div>
+
+{% else %}
+<div class="estado-vacio animacion-entrada">
+    <div class="icono-vacio">
+        <i class="fas fa-user-graduate"></i>
+    </div>
+    <h3 class="titulo-vacio">No hay aprendices registrados</h3>
+    <p class="descripcion-vacio">
+        Actualmente no se encuentran aprendices registrados en el sistema institucional.<br>
+        Inicie el proceso de registro para comenzar a gestionar la información estudiantil.
+    </p>
+    <a href="{% url 'admin:aprendices_aprendiz_add' %}" class="boton-accion-vacio">
+        <i class="fas fa-plus"></i>
+        Registrar Primer Aprendiz
+    </a>
+</div>
+{% endif %}
+
+<script>
+    document.getElementById('campoBusqueda').addEventListener('input', function(e) {
+        const terminoBusqueda = e.target.value.toLowerCase();
+        document.querySelectorAll('.fila-aprendiz').forEach(fila => {
+            fila.style.display = fila.textContent.toLowerCase().includes(terminoBusqueda) ? '' : 'none';
+        });
+    });
+</script>
+{% endblock %}

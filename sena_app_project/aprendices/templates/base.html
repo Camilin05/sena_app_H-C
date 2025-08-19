@@ -1,0 +1,97 @@
+
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}SENA APP - Sistema Integral de Gestión Académica{% endblock %}</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    {% load static %}
+    <link rel="stylesheet" href="{% static 'css/estilos_bases.css' %}">
+    <link rel="stylesheet" href="{% static 'css/estilos_listas.css' %}">
+    <link rel="stylesheet" href="{% static 'css/estilos_detalles.css' %}">
+
+</head>
+<body>
+    <nav class="barra-navegacion">
+        <div class="contenedor-navegacion">
+            <a href="{% url 'aprendices:inicio' %}" class="logo-marca">
+                <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSX6Gat1r36ATdBS7sTqqFH8TvIVPMkqsdLgw&s" 
+                        alt="Logo SENA" class="icono-logo">
+                <span>SENA APP</span>
+            </a>
+            
+            <button class="boton-menu-movil" onclick="alternarMenu()">
+                <i class="fas fa-bars"></i>
+            </button>
+            
+            <ul class="menu-navegacion" id="menuNavegacion">
+                <li><a href="{% url 'aprendices:inicio' %}" class="enlace-nav">
+                    <i class="fas fa-home"></i> Inicio
+                </a></li>
+                <li><a href="{% url 'aprendices:lista_aprendices' %}" class="enlace-nav">
+                    <i class="fas fa-users"></i> Aprendices
+                </a></li>
+                <li><a href="{% url 'instructores:lista_instructores' %}" class="enlace-nav">
+                    <i class="fa-solid fa-person-chalkboard"></i> Instructores
+                </a></li>
+                <li><a href="{% url 'programas:lista_programas' %}" class="enlace-nav">
+                        <i class="fa-solid fa-graduation-cap"></i> Programas
+                </a></li>
+                <li><a href="{% url 'aprendices:lista_cursos' %}" class="enlace-nav">
+                        <i class="fa-solid fa-book-open"></i> Cursos
+                </a></li>
+                <li><a href="{% url 'admin:index' %}" class="enlace-nav">
+                    <i class="fas fa-cog"></i> Panel Administrativo
+                </a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <main class="contenedor-principal">
+        {% block content %}
+        {% endblock %}
+    </main>
+
+    <footer class="pie-pagina">
+        <div class="contenedor-pie">
+            <p>© 2025 SENA APP - Sistema Integral de Gestión Académica</p>
+            <p style="opacity: 0.7; margin-top: 0.5rem;">Servicio Nacional de Aprendizaje</p>
+        </div>
+    </footer>
+
+    <script>
+        function alternarMenu() {
+            const menu = document.getElementById('menuNavegacion');
+            menu.classList.toggle('activo');
+        }
+
+        document.querySelectorAll('.enlace-nav').forEach(enlace => {
+            enlace.addEventListener('click', () => {
+                const menu = document.getElementById('menuNavegacion');
+                if (menu.classList.contains('activo')) {
+                    menu.classList.remove('activo');
+                }
+            });
+        });
+
+        window.addEventListener('scroll', function() {
+            const navbar = document.querySelector('.barra-navegacion');
+            if (window.scrollY > 100) {
+                navbar.style.background = 'linear-gradient(135deg, rgba(40, 167, 69, 0.95), rgba(32, 201, 151, 0.95))';
+                navbar.style.backdropFilter = 'blur(15px)';
+            } else {
+                navbar.style.background = 'linear-gradient(135deg, var(--verde-primario), var(--verde-secundario))';
+                navbar.style.backdropFilter = 'blur(10px)';
+            }
+        });
+
+        document.addEventListener('DOMContentLoaded', function() {
+            const elementos = document.querySelectorAll('.animacion-entrada');
+            elementos.forEach((elemento, indice) => {
+                elemento.style.animationDelay = `${indice * 0.1}s`;
+            });
+        });
+    </script>
+</body>
+</html>

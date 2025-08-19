@@ -1,0 +1,149 @@
+{% extends 'base.html' %}
+
+{% block title %}Detalles del Curso - SENA APP{% endblock %}
+
+{% block content %}
+<div class="container-fluid py-4 animacion-entrada">
+    <div class="row mb-4">
+        <div class="col-12">
+            <nav aria-label="breadcrumb">
+                <ol class="breadcrumb">
+                    <li class="breadcrumb-item"><a href="{% url 'aprendices:inicio' %}" class="back-link">Inicio</a></li>
+                    <li class="breadcrumb-item"><a href="{% url 'aprendices:lista_cursos' %}" class="back-link">Lista Cursos</a></li>
+                    <li class="breadcrumb-item active" aria-current="page">{{ curso.nombre }}</li>
+                </ol>
+            </nav>
+        </div>
+    </div>
+
+    <div class="row mb-4">
+        <div class="col-12">
+            <div class="card shadow-sm">
+                <div class="card-header d-flex align-items-center">
+                    <i class="fas fa-book-open me-2"></i>
+                    <h4 class="mb-0">Información del Curso</h4>
+                </div>
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col-md-8">
+                            <h2 class="text-primary mb-3">{{ curso.nombre }}</h2>
+                            <div class="row mb-3">
+                                <div class="col-lg-6 mb-2">
+                                    <p class="mb-1"><strong><i class="fas fa-graduation-cap text-muted me-2"></i>Programa:</strong></p>
+                                    <span class="badge badge-sena ms-3">{{ curso.programa }}</span>
+                                </div>
+                                <div class="col-lg-6 mb-2">
+                                    <p class="mb-1"><strong><i class="fas fa-hashtag text-muted me-2"></i>Código:</strong></p>
+                                    <span class="badge badge-sena ms-3">{{ curso.codigo }}</span>
+                                </div>
+                                <div class="col-lg-6 mb-2">
+                                    <p class="mb-1"><strong><i class="fas fa-check-circle text-muted me-2"></i>Estado:</strong></p>
+                                    <span class="badge bg-success ms-3">{{ curso.estado }}</span>
+                                </div>
+                                <div class="col-lg-6 mb-2">
+                                    <p class="mb-1"><strong><i class="fas fa-map-pin text-muted me-2"></i>Ambiente:</strong></p>
+                                    <span class="badge bg-success ms-3">{{ curso.aula }}</span>
+                                </div>
+                            </div>
+                            {% if curso.observaciones %}
+                            <div class="info-item mt-3">
+                                <h6 class="text-muted"><i class="fas fa-info-circle text-muted me-2"></i>Observaciones:</h6>
+                                <p class="text-muted">{{ curso.observaciones }}</p>
+                            </div>
+                            {% endif %}
+                        </div>
+                        <div class="col-md-4">
+                            <div class="bg-light rounded p-4 text-center mb-3">
+                                <i class="fas fa-clock text-success fa-2x mb-2"></i>
+                                <h6 class="text-muted mb-0"><strong>Horario</strong></h6>
+                                <p class="h5 text-primary mb-0">{{ curso.horario }}</p>
+                            </div>
+                            <div class="bg-light rounded p-4 text-center">
+                                <i class="fas fa-calendar-alt text-success fa-2x mb-2"></i>
+                                <h6 class="mt-2 text-muted"><strong>Inicio:</strong> {{ curso.fecha_inicio|date:"d/m/Y" }}</h6>
+                                <h6 class="mt-2 text-muted"><strong>Finalización:</strong> {{ curso.fecha_fin|date:"d/m/Y" }}</h6>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-lg-6 mb-4">
+            <div class="card shadow-sm h-100">
+                <div class="card-header d-flex justify-content-between align-items-center">
+                    <div class="d-flex align-items-center">
+                        <i class="fas fa-users me-2"></i>
+                        <h5 class="mb-0">Aprendices Registrados</h5>
+                    </div>
+                    <span class="badge bg-white text-success">{{ aprendices_curso|length }} estudiantes</span>
+                </div>
+                <div class="card-body">
+                    {% if aprendices_curso %}
+                    <div class="list-group list-group-flush">
+                        {% for aprendiz in aprendices_curso %}
+                        <div class="list-group-item px-0 border-0 border-bottom">
+                            <div class="flex-grow-1">
+                                <h6 class="mb-1">{{ aprendiz }}</h6>
+                            </div>
+                        </div>
+                        {% endfor %}
+                    </div>
+                    {% else %}
+                    <p class="text-muted text-center mt-4">No hay aprendices registrados en este curso.</p>
+                    {% endif %}
+                </div>
+                {% if aprendices_curso %}
+                    <div class="card-footer">
+                        <div class="d-flex justify-content-between align-items-center">
+                            <small class="text-muted">Lista completa de aprendices</small>
+                            <a href="{% url 'aprendices:lista_aprendices' %}" class="btn btn-sm btn-outline-success">
+                                <i class="fas fa-eye me-1"></i>Ver Todos
+                            </a>
+                        </div>
+                    </div>
+                {% endif %}
+            </div>
+        </div>
+
+        <div class="col-lg-6 mb-4">
+            <div class="card shadow-sm h-100">
+                <div class="card-header d-flex justify-content-between align-items-center">
+                    <div class="d-flex align-items-center">
+                        <i class="fas fa-person-chalkboard me-2"></i>
+                        <h5 class="mb-0">Instructores del Curso</h5>
+                    </div>
+                    <span class="badge bg-white text-success">{{ instructores_curso|length }} instructores</span>
+                </div>
+                <div class="card-body">
+                    {% if instructores_curso %}
+                    <div class="list-group list-group-flush">
+                        {% for instructor in instructores_curso %}
+                        <div class="list-group-item px-0 border-0 border-bottom">
+                            <div class="flex-grow-1">
+                                <h6 class="mb-1">{{ instructor }}</h6>
+                            </div>
+                        </div>
+                        {% endfor %}
+                    </div>
+                    {% else %}
+                    <p class="text-muted text-center mt-4">No hay instructores asignados a este curso.</p>
+                    {% endif %}
+                </div>
+                {% if instructores_curso %}
+                <div class="card-footer">
+                    <div class="d-flex justify-content-between align-items-center">
+                        <small class="text-muted">Lista completa de instructores</small>
+                        <a href="{% url 'instructores:lista_instructores' %}" class="btn btn-sm btn-outline-success">
+                            <i class="fas fa-eye me-1"></i>Ver Todos
+                        </a>
+                    </div>
+                </div>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
