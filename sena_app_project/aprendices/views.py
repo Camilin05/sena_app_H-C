@@ -1,7 +1,11 @@
 from django.shortcuts import render, get_object_or_404
 from .models import Aprendiz, Curso
 from instructores.models import Instructor
-from programas.models import Programa # Asegúrate de importar Programa si no lo has hecho
+from programas.models import Programa 
+from aprendices.forms import AprendizForm
+from django.views import generic
+
+# Asegúrate de importar Programa si no lo has hecho
 
 # Create your views here.
 
@@ -55,3 +59,13 @@ def detalle_aprendiz(request, aprendiz_id):
         'aprendiz': aprendiz,
     }
     return render(request, 'detalle_aprendiz.html', context)
+
+class AprendizFormView(generic.FormView):
+    template_name = "crear_aprendiz.html"
+    form_class = AprendizForm
+    success_url = "../aprendices/"
+
+#Metodo para guardar el Formulario
+    def form_valid(self, form):
+        form.save()
+        return super().form_valid(form)

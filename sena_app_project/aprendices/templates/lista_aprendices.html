@@ -14,7 +14,7 @@
                 <i class="fas fa-users"></i>
                 <span>Total: {{ total_aprendices|default:"0" }} aprendices</span>
             </div>
-            <a href="{% url 'admin:aprendices_aprendiz_add' %}" class="boton-nuevo">
+            <a href="{% url 'aprendices:crear_aprendiz' %}" class="boton-nuevo">
                 <i class="fas fa-plus"></i>
                 Registrar Aprendiz
             </a>
@@ -114,7 +114,7 @@
         Actualmente no se encuentran aprendices registrados en el sistema institucional.<br>
         Inicie el proceso de registro para comenzar a gestionar la información estudiantil.
     </p>
-    <a href="{% url 'admin:aprendices_aprendiz_add' %}" class="boton-accion-vacio">
+    <a href="{% url 'aprendices:crear_aprendiz' %}" class="boton-accion-vacio">
         <i class="fas fa-plus"></i>
         Registrar Primer Aprendiz
     </a>

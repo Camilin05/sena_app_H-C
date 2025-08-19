@@ -12,8 +12,14 @@
             <h2>Lista de programas</h2>
             <div class="total-aprendices">
                 <i class="fas fa-book-open"></i>
-                Total de programas: {{ total_programas }}
+                Total de programas: {{ total_programas }} <br>
+                            
+                
             </div>
+            <a href="{% url 'programas:crear_programa' %}" class="boton-nuevo">
+                    <i class="fas fa-plus"></i>
+                        Registrar Programa
+                </a>
             <table>
                 <thead>
                     <tr>
@@ -59,7 +65,7 @@
                 <p class="descripcion-vacio">Aún no se han agregado programas de formación al sistema.</p>
             
         
-        <a href="{% url 'admin:programas_programa_add' %}" class="boton-accion-vacio">
+        <a href="{% url 'programas:crear_programa' %}" class="boton-accion-vacio">
             <i class="fas fa-plus"></i> Nuevo Programa
         </a>
         </div>
