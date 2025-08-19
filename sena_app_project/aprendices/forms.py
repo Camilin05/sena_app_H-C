@@ -1,5 +1,7 @@
+# aprendices/forms.py
 from django import forms
 from .models import Aprendiz, Curso
+from apoyos.models import Apoyos
 
 class AprendizForm(forms.Form):
     documento_identidad = forms.CharField(max_length=20, label="Documento de Identidad")
@@ -10,7 +12,24 @@ class AprendizForm(forms.Form):
     fecha_nacimiento = forms.DateField(label="Fecha de Nacimiento")
     ciudad = forms.CharField(max_length=100, required=False, label="Ciudad")
     programa = forms.CharField(max_length=100, required=False, label="Programa de Formación")
-    apoyos = forms.ChoiceField(choices=Aprendiz.APOYOS_CHOICES, label="Apoyo SENA", help_text="Seleccione el napoyo el cual pertene.")
+    apoyos = forms.ChoiceField(
+        choices=Aprendiz.APOYOS_CHOICES, 
+        label="Apoyo SENA", 
+        help_text="Seleccione el apoyo al cual pertenece.",
+        required=False
+    )
+    monto_apoyo = forms.DecimalField(
+        max_digits=10,
+        decimal_places=2,
+        required=False,
+        label="Monto del Apoyo",
+        help_text="Ingrese el monto si aplica"
+    )
+    observaciones_apoyo = forms.CharField(
+        widget=forms.Textarea(attrs={'rows': 3}),
+        required=False,
+        label="Observaciones del Apoyo"
+    )
     
     #Validaciones personalizadas 
     def clean(self):
@@ -28,6 +47,11 @@ class AprendizForm(forms.Form):
         documento = self.cleaned_data['documento_identidad']
         if not documento.isdigit():
             raise forms.ValidationError("El documento debe contener solo números.")
+        
+        # Verificar si ya existe un aprendiz con este documento
+        if Aprendiz.objects.filter(documento_identidad=documento).exists():
+            raise forms.ValidationError("Ya existe un aprendiz con este documento de identidad.")
+        
         return documento
 
     def clean_telefono(self):
@@ -36,9 +60,19 @@ class AprendizForm(forms.Form):
             raise forms.ValidationError("El teléfono debe contener solo números.")
         return telefono
     
-    #Crear un método para guardar los datos del formulario en la base de datos
+    def clean_monto_apoyo(self):
+        monto = self.cleaned_data.get('monto_apoyo')
+        apoyo_tipo = self.cleaned_data.get('apoyos')
+        
+        if apoyo_tipo and apoyo_tipo != 'NA' and monto and monto <= 0:
+            raise forms.ValidationError("El monto debe ser mayor a 0.")
+        
+        return monto
+    
+    #Método para guardar los datos del formulario en la base de datos
     def save(self):
-        Aprendiz.objects.create(
+        # Crear el aprendiz
+        aprendiz = Aprendiz.objects.create(
             documento_identidad=self.cleaned_data['documento_identidad'],
             nombre=self.cleaned_data['nombre'],
             apellido=self.cleaned_data['apellido'],
@@ -49,3 +83,15 @@ class AprendizForm(forms.Form):
             programa=self.cleaned_data.get('programa', 'No especificado'),
             apoyos=self.cleaned_data.get('apoyos', 'NA')
         )
+        
+        # Crear el apoyo si se seleccionó uno válido
+        tipo_apoyo = self.cleaned_data.get('apoyos')
+        if tipo_apoyo and tipo_apoyo != 'NA':
+            Apoyos.objects.create(
+                aprendiz=aprendiz,
+                tipo_apoyo=tipo_apoyo,
+                monto=self.cleaned_data.get('monto_apoyo'),
+                observaciones=self.cleaned_data.get('observaciones_apoyo')
+            )
+        
+        return aprendiz

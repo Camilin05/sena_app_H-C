@@ -1,4 +1,231 @@
-{% extends "base.html" %}
+{% extends 'base.html' %}
 
-{% block title %}Lista de Apoyos - Sistema Integral SENA{% endblock %}
+{% block title %}Lista de Apoyos - Sistema SENA{% endblock %}
 
+{% block content %}
+<div class="encabezado-pagina animacion-entrada">
+    <div class="contenedor-encabezado">
+        <div class="info-encabezado">
+            <h2>Gestión de Apoyos SENA</h2>
+            <p class="subtitulo-encabezado">Registro integral de apoyos asignados a aprendices</p>
+        </div>
+        <div class="controles-encabezado">
+            <div class="insignia-total">
+                <i class="fas fa-life-ring"></i>
+                <span>Total: {{ total_apoyos|default:"0" }} apoyos</span>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="seccion-filtros animacion-entrada">
+    <div class="contenedor-filtros">
+        <div class="campo-busqueda">
+            <i class="fas fa-search icono-busqueda"></i>
+            <input type="text" class="entrada-busqueda" placeholder="Buscar por aprendiz o tipo de apoyo..." id="campoBusqueda">
+        </div>
+        <div class="filtros-avanzados">
+            <select class="filtro-select" id="filtroTipoApoyo">
+                <option value="">Todos los tipos de apoyo</option>
+                <option value="ASR">Apoyo Sostenimiento Regular</option>
+                <option value="FIC">Apoyo Sostenimiento FIC</option>
+                <option value="ATR">Apoyo de transporte</option>
+                <option value="ALM">Apoyo Alimentación</option>
+            </select>
+            <select class="filtro-select" id="filtroEstado">
+                <option value="">Todos los estados</option>
+                <option value="activo">Activos</option>
+                <option value="inactivo">Inactivos</option>
+            </select>
+        </div>
+    </div>
+</div>
+
+{% if lista_apoyos %}
+<div class="contenedor-tabla animacion-entrada aparecer">
+    <table class="tabla-moderna">
+        <thead>
+            <tr>
+                <th><i class="fas fa-user"></i> Aprendiz</th>
+                <th><i class="fas fa-id-card"></i> Documento</th>
+                <th><i class="fas fa-life-ring"></i> Tipo de Apoyo</th>
+                <th><i class="fas fa-dollar-sign"></i> Monto</th>
+                <th><i class="fas fa-calendar"></i> Fecha Asignación</th>
+                <th><i class="fas fa-check-circle"></i> Estado</th>
+                <th><i class="fas fa-comment"></i> Observaciones</th>
+                <th><i class="fas fa-cogs"></i> Acciones</th>
+            </tr>
+        </thead>
+        <tbody id="tablaApoyos">
+            {% for apoyo in lista_apoyos %}
+            <tr class="fila-apoyo" 
+                data-tipo="{{apoyo.tipo_apoyo}}" 
+                data-estado="{% if apoyo.activo %}activo{% else %}inactivo{% endif %}">
+                <td>
+                    <div class="info-aprendiz">
+                        <strong>{{ apoyo.aprendiz.nombre_completo }}</strong>
+                        <small class="text-muted d-block">{{ apoyo.aprendiz.programa|default:"Sin programa" }}</small>
+                    </div>
+                </td>
+                <td>
+                    <span class="documento-destacado">{{ apoyo.aprendiz.documento_identidad }}</span>
+                </td>
+                <td>
+                    <span class="tipo-apoyo-etiqueta tipo-{{ apoyo.tipo_apoyo }}">
+                        {{ apoyo.get_tipo_apoyo_display }}
+                    </span>
+                </td>
+                <td>
+                    {% if apoyo.monto %}
+                        <span class="monto-apoyo">${{ apoyo.monto|floatformat:0 }}</span>
+                    {% else %}
+                        <span class="text-muted">No especificado</span>
+                    {% endif %}
+                </td>
+                <td>
+                    <span class="fecha-formateada">{{ apoyo.fecha_asignacion|date:"d/m/Y" }}</span>
+                </td>
+                <td>
+                    {% if apoyo.activo %}
+                        <span class="estado-badge activo">
+                            <i class="fas fa-check-circle"></i> Activo
+                        </span>
+                    {% else %}
+                        <span class="estado-badge inactivo">
+                            <i class="fas fa-times-circle"></i> Inactivo
+                        </span>
+                    {% endif %}
+                </td>
+                <td>
+                    {% if apoyo.observaciones %}
+                        <div class="observaciones-cortas">
+                            {{ apoyo.observaciones|truncatechars:50 }}
+                            {% if apoyo.observaciones|length > 50 %}
+                                <button class="btn-ver-mas" onclick="mostrarObservaciones('{{ apoyo.id }}')">
+                                    <i class="fas fa-eye"></i>
+                                </button>
+                            {% endif %}
+                        </div>
+                    {% else %}
+                        <span class="text-muted">Sin observaciones</span>
+                    {% endif %}
+                </td>
+                <td>
+                    <div class="acciones-tabla">
+                        
+                        <a href="" 
+                            class="boton-accion editar" title="Editar apoyo">
+                            <i class="fas fa-edit"></i>
+                        </a>
+                    </div>
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+
+<div class="resumen-estadisticas animacion-entrada">
+    <div class="contenedor-estadisticas-apoyos">
+        <div class="estadistica-item">
+            <i class="fas fa-users"></i>
+            <div class="estadistica-content">
+                <h4>{{ total_apoyos }}</h4>
+                <p>Total Apoyos</p>
+            </div>
+        </div>
+        <div class="estadistica-item">
+            <i class="fas fa-check-circle text-success"></i>
+            <div class="estadistica-content">
+                <h4 id="apoyos-activos">0</h4>
+                <p>Apoyos Activos</p>
+            </div>
+        </div>
+        <div class="estadistica-item">
+            <i class="fas fa-dollar-sign"></i>
+            <div class="estadistica-content">
+                <h4 id="monto-total">$0</h4>
+                <p>Inversión Total</p>
+            </div>
+        </div>
+    </div>
+</div>
+
+{% else %}
+<div class="estado-vacio animacion-entrada">
+    <div class="icono-vacio">
+        <i class="fas fa-life-ring"></i>
+    </div>
+    <h3 class="titulo-vacio">No hay apoyos registrados</h3>
+    <p class="descripcion-vacio">
+        Actualmente no se encuentran apoyos registrados en el sistema.<br>
+        Los apoyos se crean automáticamente cuando se registra un aprendiz con apoyo asignado.
+    </p>
+    <a href="{% url 'aprendices:crear_aprendiz' %}" class="boton-accion-vacio">
+        <i class="fas fa-plus"></i>
+        Registrar Aprendiz con Apoyo
+    </a>
+</div>
+{% endif %}
+
+
+
+<script>
+// Funcionalidad de búsqueda
+document.getElementById('campoBusqueda').addEventListener('input', function(e) {
+    const terminoBusqueda = e.target.value.toLowerCase();
+    filtrarTabla();
+});
+
+document.getElementById('filtroTipoApoyo').addEventListener('change', filtrarTabla);
+document.getElementById('filtroEstado').addEventListener('change', filtrarTabla);
+
+function filtrarTabla() {
+    const terminoBusqueda = document.getElementById('campoBusqueda').value.toLowerCase();
+    const tipoApoyo = document.getElementById('filtroTipoApoyo').value;
+    const estado = document.getElementById('filtroEstado').value;
+    
+    document.querySelectorAll('.fila-apoyo').forEach(fila => {
+        const coincideBusqueda = fila.textContent.toLowerCase().includes(terminoBusqueda);
+        const coincideTipo = !tipoApoyo || fila.dataset.tipo === tipoApoyo;
+        const coincideEstado = !estado || fila.dataset.estado === estado;
+        
+        fila.style.display = (coincideBusqueda && coincideTipo && coincideEstado) ? '' : 'none';
+    });
+    
+    actualizarEstadisticas();
+}
+
+function actualizarEstadisticas() {
+    const filasVisibles = document.querySelectorAll('.fila-apoyo:not([style*="none"])');
+    let apoyosActivos = 0;
+    let montoTotal = 0;
+    
+    filasVisibles.forEach(fila => {
+        if (fila.dataset.estado === 'activo') {
+            apoyosActivos++;
+        }
+        
+        const montoElement = fila.querySelector('.monto-apoyo');
+        if (montoElement) {
+            const monto = parseFloat(montoElement.textContent.replace(/[$,]/g, ''));
+            if (!isNaN(monto)) {
+                montoTotal += monto;
+            }
+        }
+    });
+    
+    document.getElementById('apoyos-activos').textContent = apoyosActivos;
+    document.getElementById('monto-total').textContent = '$' + montoTotal.toLocaleString();
+}
+
+function mostrarObservaciones(apoyoId) {
+    alert('Funcionalidad de mostrar observaciones completas - Próximamente disponible');
+}
+
+// Inicializar estadísticas
+document.addEventListener('DOMContentLoaded', function() {
+    actualizarEstadisticas();
+});
+</script>
+{% endblock %}
