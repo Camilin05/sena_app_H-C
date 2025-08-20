@@ -107,6 +107,22 @@
                 <i class="fas fa-arrow-right"></i>
             </a>
         </div>
+        <div class="tarjeta-servicio animacion-entrada">
+            <div class="icono-servicio">
+                <a href="{% url 'apoyos:lista_apoyos' %}">
+                    <i class="fas fa-book-open"></i>
+                </a>
+            </div>
+            <h3 class="titulo-servicio">Lista de Apoyos</h3>
+            <p class="descripcion-servicio">
+                Visualice los cursos activos actualmente. 
+                Consulte detalles completos sobre cada curso, incluyendo características específicas, duración, instructores y aprendices vinculados a este curso.
+            </p>
+            <a href="{% url 'aprendices:lista_cursos' %}" class="boton-servicio">
+                Consultar Apoyos
+                <i class="fas fa-arrow-right"></i>
+            </a>
+        </div>
     </div>
 </div>
 

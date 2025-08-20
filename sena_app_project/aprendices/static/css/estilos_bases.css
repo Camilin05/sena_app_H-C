@@ -37,12 +37,11 @@ body {
 }
 
 .contenedor-navegacion {
-    max-width: 1400px;
-    margin: 0 auto;
     padding: 1rem 2rem;
     display: flex;
     justify-content: space-between;
     align-items: center;
+    margin: 0 auto;
 }
 
 .logo-marca {
@@ -286,14 +285,14 @@ body {
 .cuadricula-servicios {
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
-    gap: 2rem;
+    gap: 10px;
     margin-top: 2rem;
 }
 
 .tarjeta-servicio {
     background: var(--blanco);
     border-radius: 20px;
-    padding: 2.5rem;
+    padding: 1rem;
     box-shadow: var(--sombra-suave);
     transition: all 0.4s ease;
     position: relative;
