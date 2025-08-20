@@ -1,4 +1,3 @@
-# apoyos/models.py
 from django.db import models
 
 class Apoyos(models.Model):
@@ -46,7 +45,7 @@ class Apoyos(models.Model):
         verbose_name = "Apoyo"
         verbose_name_plural = "Apoyos"
         ordering = ['-fecha_asignacion']
-        unique_together = ['aprendiz', 'tipo_apoyo']  # Un aprendiz no puede tener el mismo tipo de apoyo duplicado
+        unique_together = ['aprendiz', 'tipo_apoyo']
     
     def __str__(self):
         return f"{self.aprendiz.nombre_completo()} - {self.get_tipo_apoyo_display()}"

@@ -5,9 +5,6 @@ from programas.models import Programa
 from aprendices.forms import AprendizForm
 from django.views import generic
 
-# Asegúrate de importar Programa si no lo has hecho
-
-# Create your views here.
 
 def aprendices(request):
     lista_aprendices = Aprendiz.objects.all().order_by('apellido', 'nombre')
@@ -20,7 +17,6 @@ def aprendices(request):
 def inicio(request):
     total_aprendices = Aprendiz.objects.count()
     total_instructores = Instructor.objects.count()
-    # Asumo que tienes un modelo Programa en una app 'programas'
     total_programas = Programa.objects.count() 
     cursos_activos = Curso.objects.filter(estado__in=['INI', 'EJE']).count()
     
@@ -42,7 +38,6 @@ def lista_cursos(request):
 
 def detalle_curso(request, curso_id):
     curso = get_object_or_404(Curso, id=curso_id)
-    # CORRECCIÓN IMPORTANTE AQUÍ: estabas obteniendo instructores en ambas variables
     aprendices_curso = curso.aprendizcurso_set.all()
     instructores_curso = curso.instructorcurso_set.all()
     
@@ -65,7 +60,6 @@ class AprendizFormView(generic.FormView):
     form_class = AprendizForm
     success_url = "../aprendices/"
 
-#Metodo para guardar el Formulario
     def form_valid(self, form):
         form.save()
         return super().form_valid(form)

@@ -1,4 +1,3 @@
-# aprendices/forms.py
 from django import forms
 from .models import Aprendiz, Curso
 from apoyos.models import Apoyos
@@ -31,7 +30,6 @@ class AprendizForm(forms.Form):
         label="Observaciones del Apoyo"
     )
     
-    #Validaciones personalizadas 
     def clean(self):
         cleaned_data = super().clean()
         documento = cleaned_data.get('documento_identidad')
@@ -48,7 +46,6 @@ class AprendizForm(forms.Form):
         if not documento.isdigit():
             raise forms.ValidationError("El documento debe contener solo números.")
         
-        # Verificar si ya existe un aprendiz con este documento
         if Aprendiz.objects.filter(documento_identidad=documento).exists():
             raise forms.ValidationError("Ya existe un aprendiz con este documento de identidad.")
         
@@ -69,9 +66,7 @@ class AprendizForm(forms.Form):
         
         return monto
     
-    #Método para guardar los datos del formulario en la base de datos
     def save(self):
-        # Crear el aprendiz
         aprendiz = Aprendiz.objects.create(
             documento_identidad=self.cleaned_data['documento_identidad'],
             nombre=self.cleaned_data['nombre'],
@@ -84,7 +79,6 @@ class AprendizForm(forms.Form):
             apoyos=self.cleaned_data.get('apoyos', 'NA')
         )
         
-        # Crear el apoyo si se seleccionó uno válido
         tipo_apoyo = self.cleaned_data.get('apoyos')
         if tipo_apoyo and tipo_apoyo != 'NA':
             Apoyos.objects.create(
